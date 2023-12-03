@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../providers/AuthProviders';
 
 const Login = () => {
-    const { login } = useContext(AuthContext)
+    const { login, signInWithGoogle } = useContext(AuthContext)
     const handleLogin = (event) => {
         event.preventDefault();
         const email = event.target.email.value;
@@ -21,6 +21,20 @@ const Login = () => {
                 const errorMessage = error.message;
             });
 
+    }
+
+    const handlePopup = () => {
+        signInWithGoogle()
+            .then((result) => {
+                // Signed in 
+                const loggedUser = result.user;
+                console.log("Login: ", loggedUser)
+                form.reset();
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+            });
     }
     return (
         <div>
@@ -53,6 +67,7 @@ const Login = () => {
                                 <Link to="/register" className="label-text-alt link link-hover">Do not have account, Register</Link>
                             </label>
                         </form>
+                        <button onClick={handlePopup} className="btn btn-secondary">Login with Popup</button>
                     </div>
                 </div>
             </div>
